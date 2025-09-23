@@ -1,5 +1,4 @@
 import CardCarousel from '@/components/sections/card-carousel'
-
 import Details from '@/components/sections/details'
 import Hero from '@/components/sections/hero'
 import ProductGrid from '@/components/sections/product-grid'
@@ -8,8 +7,10 @@ import { notFound } from 'next/navigation'
 import { dc } from '@/lib/data-connect'
 import { getCollectionsByPage } from '@firebasegen/default-connector'
 import CardOverlay from '@/components/card-overlay'
+import { getRemoteConfigDarkMode } from '@/lib/firebase/admin'
 
 export default async function Home() {
+  const darkMode = await getRemoteConfigDarkMode()
   const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' })
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
@@ -32,6 +33,7 @@ export default async function Home() {
         image={mainCollection?.featuredImage?.url as string}
         primaryCta={{ label: 'Shop Now', href: `/category/${mainCollection?.handle}` }}
         secondaryCta={{ label: 'Learn More', href: `/category/${mainCollection?.handle}#about` }}
+        darkMode={darkMode}
       />
       <Details title="About" body={mainCollection?.description as string} />
       <CardCarousel title="Explore" cta={{ label: 'Shop All', href: '/products' }}>
