@@ -38,18 +38,14 @@ export default function Header({ navigation }: Props) {
     fetchAndActivate(remoteConfig)
       .then(() => {
         const darkModeValue = getValue(remoteConfig, 'darkmode').asString();
+        console.log('Remote Config darkmode:', darkModeValue); // Logging for debug
         setIsDarkMode(darkModeValue === 'true');
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('Remote Config error:', err);
         setIsDarkMode(false);
       });
   }, []);
-  // Set default value from Firebase Remote Config
-  useEffect(() => {
-    getDarkModeRemoteConfig().then((remoteValue) => {
-      setIsDarkMode(remoteValue)
-    })
-  }, [])
 
   // Toggle dark mode by adding/removing 'dark' class on <html>
   useEffect(() => {
