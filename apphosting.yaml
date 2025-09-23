@@ -28,8 +28,8 @@ env:
   # The Google API key needs access to the Generative AI APIs. Create your key by visiting
   # https://ai.google.dev/gemini-api/docs and clicking "Get a Gemini API Key"
   # You can then run `firebase apphosting:secrets:set google-api-key and pasting the value.
-  # - variable: GOOGLE_API_KEY
-  #   secret: google-api-key
+  - variable: GOOGLE_API_KEY
+    secret: google-api-key
 
   # To use stripe, you must create an account on stripe.com. From the stripe dashboard
   # You can copy the NEXT_PUBLIC_STRIPE_PUB_KEY from "Publishable key" in the dashboard.
