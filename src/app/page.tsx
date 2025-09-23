@@ -10,8 +10,8 @@ import CardOverlay from '@/components/card-overlay'
 import { getRemoteConfigDarkMode } from '@/lib/firebase/admin'
 
 export default async function Home() {
-  const darkMode = await getRemoteConfigDarkMode()
-  const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' })
+  const darkMode = await getRemoteConfigDarkMode();
+  const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
   ].sort((a, b) => {
@@ -19,14 +19,24 @@ export default async function Home() {
       'o25-collection': 1,
       'mist-collection': 2,
       'winter-collection': 3
-    }
-    return (order[a.handle] || 99) - (order[b.handle] || 99)
-  })
+    };
+    return (order[a.handle] || 99) - (order[b.handle] || 99);
+  });
 
-  if (!collectionsData?.collections?.length) return notFound()
+  if (!collectionsData?.collections?.length) return notFound();
+
+  // Example navigation, replace with your actual navigation data
+  const navigation = [
+    { label: 'Home', href: '/' },
+    { label: 'Shop', href: '/products' },
+    { label: 'Cart', href: '/cart' },
+    { label: 'Orders', href: '/orders' }
+  ];
 
   return (
     <>
+      {/* Pass SSR darkMode value to Header for client hydration */}
+      <Header navigation={navigation} initialDarkMode={darkMode} />
       <Hero
         title={mainCollection?.name as string}
         description={mainCollection?.description as string}
@@ -69,5 +79,5 @@ export default async function Home() {
         }))}
       />
     </>
-  )
+  );
 }
