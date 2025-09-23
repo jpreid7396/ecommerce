@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
+import { getRemoteConfig, getValue, fetchAndActivate } from 'firebase/remote-config';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,3 +18,18 @@ const app = initializeApp(firebaseConfig)
 // Initialize Firebase Auth and export it
 export const auth = getAuth(app)
 export { app as firebaseApp }
+
+export const remoteConfig = getRemoteConfig(app);
+remoteConfig.settings = {
+  minimumFetchIntervalMillis: 3600000,
+  fetchTimeoutMillis: 60000,
+};
+remoteConfig.defaultConfig = {
+  darkmode: 'false',
+};
+
+export async function getDarkModeRemoteConfig() {
+  await fetchAndActivate(remoteConfig);
+  const darkModeValue = getValue(remoteConfig, 'darkmode').asString();
+  return darkModeValue === 'true';
+}

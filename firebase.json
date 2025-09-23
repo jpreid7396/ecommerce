@@ -3,10 +3,6 @@
     "source": "dataconnect"
   },
   "emulators": {
-    "apphosting": {
-      "port": 5002,
-      "rootDirectory": "./"
-    },
     "auth": {
       "port": 9099
     },
@@ -17,7 +13,12 @@
     "ui": {
       "enabled": true
     },
-    "singleProjectMode": true
+    "singleProjectMode": true,
+    "apphosting": {
+      "port": 5002,
+      "rootDirectory": "./",
+      "startCommand": "pnpm run dev"
+    }
   },
   "apphosting": {
     "backendId": "ecommerce-app",

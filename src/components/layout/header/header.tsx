@@ -4,6 +4,9 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useEffect, useRef, useState } from 'react'
+import { getValue, fetchAndActivate } from 'firebase/remote-config';
+import { remoteConfig } from '@/lib/firebase';
+import { getDarkModeRemoteConfig } from '@/lib/firebase'
 import FirebaseIcon from '../../icons/firebase'
 import User from '../../icons/user'
 import HamburgerButton from './hamburger-button'
@@ -30,6 +33,23 @@ type Props = {
 export default function Header({ navigation }: Props) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
+
+  useEffect(() => {
+    fetchAndActivate(remoteConfig)
+      .then(() => {
+        const darkModeValue = getValue(remoteConfig, 'darkmode').asString();
+        setIsDarkMode(darkModeValue === 'true');
+      })
+      .catch(() => {
+        setIsDarkMode(false);
+      });
+  }, []);
+  // Set default value from Firebase Remote Config
+  useEffect(() => {
+    getDarkModeRemoteConfig().then((remoteValue) => {
+      setIsDarkMode(remoteValue)
+    })
+  }, [])
 
   // Toggle dark mode by adding/removing 'dark' class on <html>
   useEffect(() => {
