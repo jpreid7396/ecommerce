@@ -8,6 +8,7 @@ import { dc } from '@/lib/data-connect'
 import { getCollectionsByPage } from '@firebasegen/default-connector'
 import CardOverlay from '@/components/card-overlay'
 import { getRemoteConfigDarkMode } from '@/lib/firebase/admin'
+import Header from '@/components/layout/header/header';
 
 export default async function Home() {
   const darkMode = await getRemoteConfigDarkMode();
