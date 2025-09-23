@@ -1,7 +1,6 @@
 import { connectorConfig } from '@firebasegen/default-connector'
 import { initializeApp, getApps } from 'firebase/app'
 import { getDataConnect } from 'firebase/data-connect'
-import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,6 +13,4 @@ const firebaseConfig = {
 }
 
 const firebase_app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
-const analytics = getAnalytics(firebase_app)
-
 export const dc = getDataConnect(firebase_app, connectorConfig)

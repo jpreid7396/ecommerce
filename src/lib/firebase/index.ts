@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getRemoteConfig, getValue, fetchAndActivate, type RemoteConfig } from 'firebase/remote-config';
-import { getAnalytics } from 'firebase/analytics'
+import { getAnalytics, isSupported } from 'firebase/analytics'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,7 +17,14 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
-const analytics = getAnalytics(app)
+let analytics
+if (typeof window !== 'undefined') {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app)
+    }
+  })
+}
 
 // Initialize Firebase Auth and export it
 export const auth = getAuth(app)
