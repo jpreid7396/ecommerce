@@ -1,0 +1,49 @@
+tests:
+  - testName: Navigate to a Category Page from Homepage
+    steps:
+      - goal: Start on the homepage.
+      - goal: Find the "Explore" section.
+      - goal: Click on the "O24 — Collection" category link.
+      - goal: You should now be on a page showing products for the "O24 — Collection".
+        successCriteria: The page title or a heading should say "O24 — Collection".
+
+  - testName: View a Product from a Category Page
+    testConfig:
+      # Start on a category page
+      route: /category/winter-essentials
+    steps:
+      - goal: Find the product named "Amber Sunset Blazer Set".
+      - goal: Click on the "Amber Sunset Blazer Set" product.
+      - goal: You should be taken to the product's detail page.
+        successCriteria: The page should show "Amber Sunset Blazer Set" as the main product name and display its price.
+
+  - testName: Add a Product to the Cart
+    testConfig:
+      # Start on a specific product page
+      route: /product/amber-sunset-blazer-set
+    steps:
+      - goal: Find the options for the product, like size or color.
+        hint: Look for dropdown menus or buttons for "Size" or "Color".
+      - goal: Select a size for the blazer.
+      - goal: Select a color for the blazer.
+      - goal: Click the "Add to Cart" or "Add to Bag" button.
+      - goal: A notification or a cart icon should update to show an item has been added.
+        successCriteria: The cart icon (usually in the top right corner) should show "1" item.
+
+  - testName: View Items in Cart
+    steps:
+      - goal: First, add the "Amber Sunset Blazer Set" to your cart.
+        hint: Go to its product page, select options, and click "Add to Cart".
+      - goal: After adding the item, find and click on the cart icon.
+        hint: This is usually in the top navigation bar of the website.
+      - goal: You should be taken to the "Shopping Cart" or "Your Bag" page.
+      - goal: Verify that the "Amber Sunset Blazer Set" is listed in the cart.
+        successCriteria: The cart page shows "Amber Sunset Blazer Set" with its price and selected options.
+
+  - testName: Navigate to a Category via Main Navigation
+    steps:
+      - goal: Start on the homepage.
+      - goal: Find the main navigation bar at the top of the page.
+      - goal: Click on the "Women" link in the navigation bar.
+      - goal: You should be taken to the "Women" category page.
+        successCriteria: The page should display a collection of products for women.
