@@ -29,6 +29,17 @@ type Props = {
 
 export default function Header({ navigation }: Props) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+
+  // Toggle dark mode by adding/removing 'dark' class on <html>
+  useEffect(() => {
+    const html = document.documentElement
+    if (isDarkMode) {
+      html.classList.add('dark')
+    } else {
+      html.classList.remove('dark')
+    }
+  }, [isDarkMode])
   const { push } = useRouter()
   const [query, setQuery] = useState('')
   const { user } = useAuth()
@@ -90,7 +101,15 @@ export default function Header({ navigation }: Props) {
       <div className="container relative">
         <div className="max-w-screen-2xl mx-auto flex gap-10 items-center h-[60px]">
           <HamburgerButton isOpen={mobileNavOpen} setIsOpen={setMobileNavOpen} />
-
+          {/* Dark mode toggle button */}
+          <button
+            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            onClick={() => setIsDarkMode((prev) => !prev)}
+            className="p-2 rounded-full border border-gray-300 bg-gray-100 hover:bg-gray-200 transition-colors mr-2"
+            style={{ fontSize: '1.5rem' }}
+          >
+            {isDarkMode ? '🌙' : '☀️'}
+          </button>
           <Link
             href="/"
             onClick={() => setMobileNavOpen(false)}
@@ -99,7 +118,7 @@ export default function Header({ navigation }: Props) {
             <FirebaseIcon className="size-8 shrink-0" />
             <span className="text-2xl font-bold whitespace-nowrap mt-1">Julia's ecommerce</span>
           </Link>
-
+          {/* Navigation and other header content */}
           <nav
             className={cn(
               'w-full max-lg:mobile-nav-menu lg:grid lg:grid-cols-2 lg:gap-10 lg:items-center lg:mx-auto',
@@ -160,7 +179,6 @@ export default function Header({ navigation }: Props) {
                 </div>
               </Combobox>
             </div>
-
             <ul className="flex max-lg:flex-col gap-3 lg:gap-1">
               {navigation.map((item) => (
                 <li key={item.label}>
@@ -174,7 +192,6 @@ export default function Header({ navigation }: Props) {
               ))}
             </ul>
           </nav>
-
           <div className="flex gap-2 items-center max-lg:ml-auto z-50">
             {isLoggedIn ? (
               <DropdownMenu icon={<User className="size-5" />}>
