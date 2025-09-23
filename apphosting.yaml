@@ -23,6 +23,8 @@ env:
     value: 781757518933
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     value: 1:781757518933:web:4a5b976801e7972eaff0dc
+  - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    value: G-8EM4S2TEY9
 
 
   # The Google API key needs access to the Generative AI APIs. Create your key by visiting
