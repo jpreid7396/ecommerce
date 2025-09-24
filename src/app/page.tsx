@@ -7,23 +7,7 @@ import { notFound } from 'next/navigation';
 import { dc } from '@/lib/data-connect';
 import { getCollectionsByPage } from '@firebasegen/default-connector';
 import CardOverlay from '@/components/card-overlay';
-import { isDarkMode } from '@/lib/firebase/admin';
-
-export const dynamic = 'force-dynamic'
-
 export default async function Home() {
-  // Fetch remote config at request time (server) to avoid running firebase-admin during build
-  // Per Firebase SSR guidance, evaluate Remote Config inside the request handler and
-  // mark the page dynamic so Next won't attempt static collection that triggers
-  // firebase-admin network calls during build.
-  let darkMode = false
-  try {
-    darkMode = await isDarkMode()
-  } catch (err) {
-    // keep safe default (false) on any failure
-    // eslint-disable-next-line no-console
-    console.error('isDarkMode failed in Home():', err)
-  }
   const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
@@ -41,7 +25,7 @@ export default async function Home() {
   };
   
   return (
-    <div className={darkMode ? 'dark' : ''}>
+    <div>
       <Hero
         title={mainCollection?.name as string}
         description={mainCollection?.description as string}
