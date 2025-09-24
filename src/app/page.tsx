@@ -16,7 +16,7 @@ const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
 const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
 console.log('Dark Mode from Remote Config:', darkMode);
 
-export default async function Page() {
+export default async function Home() {
   const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
@@ -29,7 +29,9 @@ export default async function Page() {
     return (order[a.handle] || 99) - (order[b.handle] || 99);
   });
 
-  if (!collectionsData?.collections?.length) return notFound();
+  if (!collectionsData?.collections?.length) {
+     notFound()
+  };
 
   // Example navigation, replace with your actual navigation data
   const navigation = [
@@ -43,14 +45,13 @@ export default async function Page() {
     <div className={darkMode ? 'dark' : ''}>
       <Header navigation={navigation} />
       <Hero
-        title={mainCollection?.name ?? ''}
-        description={mainCollection?.description ?? ''}
-        image={mainCollection?.featuredImage?.url ?? ''}
+        title={mainCollection?.name as string}
+        description={mainCollection?.description as string}
+        image={mainCollection?.featuredImage?.url as string}
         primaryCta={{ label: 'Shop Now', href: `/category/${mainCollection?.handle}` }}
         secondaryCta={{ label: 'Learn More', href: `/category/${mainCollection?.handle}#about` }}
-        darkMode={darkMode}
       />
-      <Details title={mainCollection?.name ?? ''} body={mainCollection?.description ?? ''} />
+      <Details title="About" body={mainCollection?.description as string} />
       <CardCarousel title="Explore" cta={{ label: 'Shop All', href: '/products' }}>
         {collectionsData?.collections
           .filter((collection) => Boolean(collection?.featuredImage?.url))
@@ -59,27 +60,29 @@ export default async function Page() {
               key={collection.id}
               handle={collection.handle}
               name={collection.name}
-              image={collection.featuredImage?.url ?? ''}
+              image={collection.featuredImage?.url || ''}
             />
           ))}
       </CardCarousel>
       <CardOverlay
-        title={secondaryCollection?.name ?? ''}
-        description={secondaryCollection?.description ?? ''}
+        title={secondaryCollection?.name as string}
+        description={secondaryCollection?.description as string}
         cta={{ label: 'Shop Now', href: `/category/${secondaryCollection?.handle}` }}
-        image={secondaryCollection?.featuredImage?.url ?? ''}
+        image={secondaryCollection?.featuredImage?.url as string}
       />
       <ProductGrid
-        title={tertiaryCollection?.name ?? ''}
+        title={tertiaryCollection?.name as string}
         variant="character"
-        products={tertiaryCollection?.products_via_ProductCollection?.map((product) => ({
+        products={tertiaryCollection?.products_via_ProductCollection.map((product) => ({
           id: product.id,
           title: product.title,
           handle: product.handle,
-          price: product.productVariants_on_product?.at(0)?.price?.toString() ?? '',
-          image: product.productImages_on_product?.at(0),
-          variants: product.productVariants_on_product?.at(0)?.selectedOptions_on_productVariant?.map((option) => option.value ?? '') ?? []
-        })) ?? []}
+          price: product.productVariants_on_product.at(0)?.price?.toString() || '',
+          image: product.productImages_on_product.at(0),
+          variants: product.productVariants_on_product
+            .at(0)
+            ?.selectedOptions_on_productVariant.map((option) => (option.value ? option.value : ''))
+        }))}
       />
     </div>
   );
