@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-// Header removed from layout
-import Header from '@/components/layout/header/header'
+import HeaderContainer from '@/components/layout/header/header'
 import Footer from '@/components/layout/footer'
 import { Facebook, Instagram, X, Youtube } from '@/components/layout/footer/social-icons'
 import {
@@ -34,7 +33,7 @@ export default async function RootLayout({
         <AnnouncementBar>
           Get <strong>15%</strong> off and free shipping <strong>&quot;welcome&quot;</strong>
         </AnnouncementBar>
-        <Header />
+        <HeaderContainer />
         <main className="min-h-[75vh]">{children}</main>
         <Footer
           contactInformation={{
