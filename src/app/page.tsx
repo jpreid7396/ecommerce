@@ -11,12 +11,14 @@ import CardOverlay from '@/components/card-overlay';
 import { getRemoteConfigFetchResponse } from '@/lib/firebase/admin';
 import Header from '@/components/layout/header/header';
 
-const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
-// Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
-const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
-console.log('Dark Mode from Remote Config:', darkMode);
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
+  // Fetch remote config at request time (server) to avoid running firebase-admin during build
+  const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
+  // Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
+  const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
+  console.log('Dark Mode from Remote Config:', darkMode);
   const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
