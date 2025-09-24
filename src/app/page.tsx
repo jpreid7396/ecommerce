@@ -14,8 +14,9 @@ import Header from '@/components/layout/header/header';
 const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
 // Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
 const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
+console.log('Dark Mode from Remote Config:', darkMode);
 
-export default async function Page({ darkMode }: Props) {
+export default async function Page() {
   const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
