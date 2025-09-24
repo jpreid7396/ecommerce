@@ -1,3 +1,5 @@
+'use client'
+
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
 import { Fragment, useState, FormEvent } from 'react'
 import ProductListItem from '../order-summary/product-list-item'
