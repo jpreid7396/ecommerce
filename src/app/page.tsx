@@ -1,30 +1,4 @@
-import CardCarousel from '@/components/sections/card-carousel';
-import Details from '@/components/sections/details';
-import Hero from '@/components/sections/hero';
-import ProductGrid from '@/components/sections/product-grid';
-import CategoryCard from '@/components/ui/category-card';
-import { notFound } from 'next/navigation';
-import { dc } from '@/lib/data-connect';
-import { getCollectionsByPage } from '@firebasegen/default-connector';
-import CardOverlay from '@/components/card-overlay';
-import { getRemoteConfigFetchResponse } from '@/lib/firebase/admin';
-import Header from '@/components/layout/header/header';
-export default async function Page() {
-  // Fetch and serialize the Remote Config fetch response for SSR hydration
-  const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
-  // Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
-  const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
-  const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
-  const [mainCollection, secondaryCollection, tertiaryCollection] = [
-    ...(collectionsData?.collections || [])
-  ].sort((a, b) => {
-    const order: Record<string, number> = {
-      'o25-collection': 1,
-      'mist-collection': 2,
-      'winter-collection': 3
-    };
-    return (order[a.handle] || 99) - (order[b.handle] || 99);
-  });
+
 import CardCarousel from '@/components/sections/card-carousel';
 import Details from '@/components/sections/details';
 import Hero from '@/components/sections/hero';
