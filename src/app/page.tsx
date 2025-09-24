@@ -11,11 +11,11 @@ import CardOverlay from '@/components/card-overlay';
 import { getRemoteConfigFetchResponse } from '@/lib/firebase/admin';
 
 export default async function Home() {
-  // // Fetch remote config at request time (server) to avoid running firebase-admin during build
-  // const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
-  // // Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
-  // const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
-  // console.log('Dark Mode from Remote Config:', darkMode);
+  // Fetch remote config at request time (server) to avoid running firebase-admin during build
+  const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
+  // Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
+  const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
+  console.log('Dark Mode from Remote Config:', darkMode);
   const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
@@ -28,9 +28,9 @@ export default async function Home() {
     return (order[a.handle] || 99) - (order[b.handle] || 99);
   });
 
-  if (!collectionsData?.collections?.length) {
-     notFound()
-  };
+  // if (!collectionsData?.collections?.length) {
+  //    notFound()
+  // };
 
   // Example navigation, replace with your actual navigation data
   const navigation = [
@@ -41,7 +41,7 @@ export default async function Home() {
   ];
 
   return (
-    <div>
+    <div className={darkMode ? 'dark' : ''}>
       <Header navigation={navigation} />
       <Hero
         title={mainCollection?.name as string}
