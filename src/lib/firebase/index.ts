@@ -43,9 +43,16 @@ if (typeof window !== 'undefined') {
 }
 
 export async function getDarkModeRemoteConfig() {
-  if (typeof window === 'undefined' || !remoteConfig) return false;
-  await fetchAndActivate(remoteConfig);
-  const darkModeValue = getValue(remoteConfig, 'darkmode').asString();
-  return darkModeValue === 'true';
+  try {
+    if (typeof window === 'undefined' || !remoteConfig) return false;
+    await fetchAndActivate(remoteConfig);
+    const darkModeValue = getValue(remoteConfig, 'darkmode').asString();
+    return darkModeValue === 'true';
+  } catch (err) {
+    // If remote-config isn't available or fetch fails, return a safe default
+    // eslint-disable-next-line no-console
+    console.error('getDarkModeRemoteConfig error:', err);
+    return false;
+  }
 }
 export { remoteConfig };

@@ -1,4 +1,3 @@
-
 import CardCarousel from '@/components/sections/card-carousel';
 import Details from '@/components/sections/details';
 import Hero from '@/components/sections/hero';
@@ -8,14 +7,23 @@ import { notFound } from 'next/navigation';
 import { dc } from '@/lib/data-connect';
 import { getCollectionsByPage } from '@firebasegen/default-connector';
 import CardOverlay from '@/components/card-overlay';
-import { getRemoteConfigFetchResponse } from '@/lib/firebase/admin';
+import { isDarkMode } from '@/lib/firebase/admin';
+
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   // Fetch remote config at request time (server) to avoid running firebase-admin during build
-  const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
-  // Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
-  const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
-  console.log('Dark Mode from Remote Config:', darkMode);
+  // Per Firebase SSR guidance, evaluate Remote Config inside the request handler and
+  // mark the page dynamic so Next won't attempt static collection that triggers
+  // firebase-admin network calls during build.
+  let darkMode = false
+  try {
+    darkMode = await isDarkMode()
+  } catch (err) {
+    // keep safe default (false) on any failure
+    // eslint-disable-next-line no-console
+    console.error('isDarkMode failed in Home():', err)
+  }
   const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
@@ -28,21 +36,12 @@ export default async function Home() {
     return (order[a.handle] || 99) - (order[b.handle] || 99);
   });
 
-  // if (!collectionsData?.collections?.length) {
-  //    notFound()
-  // };
-
-  // Example navigation, replace with your actual navigation data
-  const navigation = [
-    { label: 'Home', href: '/' },
-    { label: 'Shop', href: '/products' },
-    { label: 'Cart', href: '/cart' },
-    { label: 'Orders', href: '/orders' }
-  ];
-
+  if (!collectionsData?.collections?.length) {
+     notFound()
+  };
+  
   return (
     <div className={darkMode ? 'dark' : ''}>
-      <Header navigation={navigation} />
       <Hero
         title={mainCollection?.name as string}
         description={mainCollection?.description as string}

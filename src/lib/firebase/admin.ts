@@ -1,13 +1,23 @@
-// @ts-ignore
-import { initializeApp, applicationDefault } from 'firebase-admin/app';
-import { getRemoteConfig, RemoteConfigFetchResponse } from 'firebase-admin/remote-config';
+import { initializeApp } from "firebase-admin/app";
+import { getRemoteConfig } from 'firebase-admin/remote-config'
 
-const app = initializeApp({ credential: applicationDefault() });
-
-// Full SSR Remote Config hydration using experimental SDK
-export async function getRemoteConfigFetchResponse() {
-  const remoteConfig = getRemoteConfig(app);
-  const template = await remoteConfig.getTemplate();
-  // Directly access parameters from the template
-  return JSON.parse(JSON.stringify({ parameters: template.parameters }));
-}
+export async function isDarkMode() {
+    const serverApp = initializeApp();
+    const serverSideConfig = getRemoteConfig(serverApp);
+    console.log(serverSideConfig);
+    const template = await serverSideConfig.initServerTemplate({
+        defaultConfig: {
+            darkmode: false
+        }
+    });
+    console.log(typeof template);
+    await template.load();
+    const config = template.evaluate({
+        randomizationId: 'phju4kdgc2v3'
+    });
+    let darkModeValue = false;
+    if (config.getBoolean('darkmode') !== undefined) {
+        darkModeValue = config.getBoolean('darkmode');
+    }
+    return darkModeValue;
+};
