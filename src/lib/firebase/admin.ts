@@ -8,8 +8,8 @@ const app = initializeApp({ credential: applicationDefault() });
 export async function getRemoteConfigFetchResponse() {
   const remoteConfig = getRemoteConfig(app);
   const template = await remoteConfig.getTemplate();
-  // You can pass targeting context here if needed
-  const config = template.evaluate({ randomizationId: 'ssr-default' });
+  await template.load()
+  const config = template.evaluate();
   const fetchResponse = new RemoteConfigFetchResponse(app, config);
   return JSON.parse(JSON.stringify(fetchResponse));
 }
