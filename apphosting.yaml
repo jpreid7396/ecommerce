@@ -1,5 +1,8 @@
 # Settings for Backend (on Cloud Run).
 # See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+scripts:
+  buildCommand: next build --debug
+
 runConfig:
   minInstances: 0
 
