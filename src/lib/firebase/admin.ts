@@ -1,15 +1,15 @@
 // @ts-ignore
-import admin from 'firebase-admin';
+import { initializeApp, applicationDefault } from 'firebase-admin/app';
+import { getRemoteConfig, RemoteConfigFetchResponse } from 'firebase-admin/remote-config';
 
-if (!admin.apps.length) {
-  admin.initializeApp({ credential: admin.credential.applicationDefault() });
-}
+const app = initializeApp({ credential: applicationDefault() });
 
-export const adminAuth = admin.auth();
-export async function getRemoteConfigDarkMode() {
-  const remoteConfig = admin.remoteConfig();
+// Full SSR Remote Config hydration using experimental SDK
+export async function getRemoteConfigFetchResponse() {
+  const remoteConfig = getRemoteConfig(app);
   const template = await remoteConfig.getTemplate();
-  const darkModeParam = template.parameters['darkmode'];
-  const value = darkModeParam?.defaultValue?.value || 'false';
-  return value === 'true';
+  // You can pass targeting context here if needed
+  const config = template.evaluate({ randomizationId: 'ssr-default' });
+  const fetchResponse = new RemoteConfigFetchResponse(app, config);
+  return JSON.parse(JSON.stringify(fetchResponse));
 }
