@@ -43,8 +43,4 @@ export default function Header({ navigation }: Props) {
       </div>
     </header>
   );
-        </div>
-      </div>
-    </header>
-  );
 }
