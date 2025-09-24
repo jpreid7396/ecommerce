@@ -11,11 +11,11 @@ import CardOverlay from '@/components/card-overlay';
 import { getRemoteConfigFetchResponse } from '@/lib/firebase/admin';
 import Header from '@/components/layout/header/header';
 
-export default async function Page() {
-  // Fetch and serialize the Remote Config fetch response for SSR hydration
-  const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
-  // Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
-  const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
+const remoteConfigFetchResponse = await getRemoteConfigFetchResponse();
+// Extract darkMode from fetchResponse (example: remoteConfigFetchResponse.parameters['darkmode'])
+const darkMode = remoteConfigFetchResponse.parameters?.['darkmode']?.value === 'true';
+
+export default async function Page({ darkMode }: Props) {
   const { data: collectionsData } = await getCollectionsByPage(dc, { page: 'home' });
   const [mainCollection, secondaryCollection, tertiaryCollection] = [
     ...(collectionsData?.collections || [])
@@ -39,9 +39,8 @@ export default async function Page() {
   ];
 
   return (
-    <>
-      {/* Pass SSR darkMode value to Header for client hydration */}
-      <Header navigation={navigation} initialDarkMode={darkMode} />
+    <div className={darkMode ? 'dark' : ''}>
+      <Header navigation={navigation} />
       <Hero
         title={mainCollection?.name ?? ''}
         description={mainCollection?.description ?? ''}
@@ -81,6 +80,6 @@ export default async function Page() {
           variants: product.productVariants_on_product?.at(0)?.selectedOptions_on_productVariant?.map((option) => option.value ?? '') ?? []
         })) ?? []}
       />
-    </>
-  )
+    </div>
+  );
 }

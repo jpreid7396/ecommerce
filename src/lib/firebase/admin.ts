@@ -8,8 +8,6 @@ const app = initializeApp({ credential: applicationDefault() });
 export async function getRemoteConfigFetchResponse() {
   const remoteConfig = getRemoteConfig(app);
   const template = await remoteConfig.getTemplate();
-  await template.load()
-  const config = template.evaluate();
-  const fetchResponse = new RemoteConfigFetchResponse(app, config);
-  return JSON.parse(JSON.stringify(fetchResponse));
+  // Directly access parameters from the template
+  return JSON.parse(JSON.stringify({ parameters: template.parameters }));
 }
