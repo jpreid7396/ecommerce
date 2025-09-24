@@ -14,24 +14,27 @@ import {
   Visa
 } from '@/components/layout/footer/payment-icons'
 import AnnouncementBar from '@/components/ui/announcement-bar'
+import { isDarkMode } from '@/lib/firebase/admin'
 
 export const metadata: Metadata = {
   title: 'Firebase Ecommerce Template',
   description: 'Firebase Ecommerce Template'
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const dark = await isDarkMode()
+
   return (
-    <html lang="en">
+    <html lang="en" className={dark ? 'dark' : undefined}>
       <body>
         <AnnouncementBar>
           Get <strong>15%</strong> off and free shipping <strong>&quot;welcome&quot;</strong>
         </AnnouncementBar>
-  <Header />
+        <Header />
         <main className="min-h-[75vh]">{children}</main>
         <Footer
           contactInformation={{
