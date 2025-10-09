@@ -25,7 +25,7 @@ type Props = {
   navigation: { label: string; href: string }[]
 }
 
-export default function Header({ navigation }: Props) {
+export default function HeaderContainer({ navigation }: Props) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const { push } = useRouter()
   const [query, setQuery] = useState('')
