@@ -18,4 +18,4 @@ jobs:
         with:
           credentials_json: ${{ secrets.FIREBASE_APP_TESTING_SERVICE_ACCOUNT }}
       - name: Run tests on App Hosting
-        run: npx firebase-tools@latest experiments:enable apptesting && firebase apptesting:execute ecommerce--ecommerce-9f120.us-east4.hosted.app
+        run: npx firebase-tools@latest experiments:enable apptesting && firebase apptesting:execute https://ecommerce-app--ecommerce-9f120.us-central1.hosted.app
