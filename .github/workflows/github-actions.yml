@@ -2,6 +2,9 @@ name: Firebase App Testing
 on:
   check_run:
     types: [completed]
+permissions:
+  id-token: write
+  contents: read
 jobs:
   run_ai_tests:
     timeout-minutes: 20
@@ -16,6 +19,8 @@ jobs:
           node-version: lts/*
       - uses: google-github-actions/auth@v2
         with:
+          create_credentials_file: true
+          workload_identity_provider: 'projects/781757518933/locations/global/workloadIdentityPools/github-action/providers/GitHub'
           credentials_json: ${{ secrets.FIREBASE_APP_TESTING_SERVICE_ACCOUNT }}
       - name: Run tests on App Hosting
         run: curl -sL https://firebase.tools | bash && firebase experiments:enable apptesting && firebase apptesting:execute https://ecommerce-app--ecommerce-9f120.us-central1.hosted.app --project ecommerce-9f120 --app 1:781757518933:web:4a5b976801e7972eaff0dc
