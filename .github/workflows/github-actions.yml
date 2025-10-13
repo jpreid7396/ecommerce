@@ -21,5 +21,6 @@ jobs:
         with:
           create_credentials_file: true
           workload_identity_provider: 'projects/781757518933/locations/global/workloadIdentityPools/github-action/providers/github'
+          service_account: 'firebaseapptesting-test-runner@ecommerce-9f120.iam.gserviceaccount.com'
       - name: Run tests on App Hosting
         run: curl -sL https://firebase.tools | bash && firebase experiments:enable apptesting && firebase apptesting:execute https://ecommerce-app--ecommerce-9f120.us-central1.hosted.app --project ecommerce-9f120 --app 1:781757518933:web:4a5b976801e7972eaff0dc
