@@ -1,4 +1,4 @@
-name: Firebase App Testing (App Hosting)
+name: Firebase App Testing (App Hosting) on new branch
 on:
   check_run:
     types: [completed]
