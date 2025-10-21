@@ -1,0 +1,24 @@
+name: Firebase App Testing
+on:
+  check_run:
+    types: [completed]
+jobs:
+  run_ai_tests:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    if: |
+      github.event.check_run.app.name == 'Firebase App Hosting' &&
+      github.event.check_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_APP_TESTING_SERVICE_ACCOUNT }}
+      - name: Run tests on App Hosting
+        env:
+           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: curl -sL https://firebase.tools | bash && firebase experiments:enable apptesting && firebase apptesting:execute https://ecommerce-app--ecommerce-9f120.us-central1.hosted.app --project ecommerce-9f120 --app 1:781757518933:web:4a5b976801e7972eaff0dc --token "$FIREBASE_TOKEN"
+
