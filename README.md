@@ -1,4 +1,4 @@
-# Firebase E-Commerce Project
+# Firebase E-Commerce Sample App
 
 This project is a Firebase-based e-commerce application designed for developers to bootstrap their e-commerce projects. Below is the documentation to help you set up, provision, and maintain the application.
 
